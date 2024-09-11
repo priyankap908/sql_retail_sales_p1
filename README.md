@@ -27,18 +27,18 @@ DROP DATABASE sql_project_p01;
 CREATE DATABASE sql_project_p01;
 
 CREATE TABLE retail_sales 
-					(
-					transactions_id INT PRIMARY KEY, 
-					sale_date DATE , 
-					sale_time TIME, 
-					customer_id INT, 
-					gender VARCHAR(10), 
-					age INT NULL, 
-					category VARCHAR(20), 
-					quantiy INT NULL, 
-					price_per_unit DECIMAL(10,2) NULL, 
-					cogs DECIMAL(10,2) NULL, 
-					total_sale DECIMAL(10,2) NULL
+			(
+			transactions_id INT PRIMARY KEY, 
+			sale_date DATE , 
+			sale_time TIME,
+			customer_id INT,
+			gender VARCHAR(10), 
+			age INT NULL, 
+			category VARCHAR(20), 
+			quantiy INT NULL,
+			price_per_unit DECIMAL(10,2) NULL, 
+			cogs DECIMAL(10,2) NULL, 
+			total_sale DECIMAL(10,2) NULL
                     );
 SELECT * FROM retail_sales LIMIT 100;
 ```
@@ -117,20 +117,20 @@ ORDER BY 1;
 7. **Write a SQL query to calculate the average sale for each month. Find out best selling month in each year**:
 ```sql
 WITH avg_sal AS (
-				SELECT YEAR(sale_date) AS sale_year,
+		SELECT YEAR(sale_date) AS sale_year,
                         MONTH(sale_date) AS sale_month,
                         AVG(total_sale) AS avg_total_sale
-				FROM retail_sales
-				GROUP BY 1, 2
-				ORDER BY 3
+		FROM retail_sales
+		GROUP BY 1, 2
+		ORDER BY 3
                 ),
 yearly_max_sal AS (
-				SELECT sale_year,
+		SELECT sale_year,
                         sale_month,
                         avg_total_sale,
-                        RANK() OVER (PARTITION BY sale_year ORDER BY avg_total_sale DESC) AS rank_avg_sal
-				FROM avg_sal
-				GROUP BY 1, 2, 3
+			RANK() OVER (PARTITION BY sale_year ORDER BY avg_total_sale DESC) AS rank_avg_sal
+		FROM avg_sal
+		GROUP BY 1, 2, 3
                 )
 SELECT sale_year,
         sale_month,
@@ -161,17 +161,17 @@ GROUP BY category;
 10. **Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17)**:
 ```sql
 WITH morning_shift AS (
-						SELECT *, 'Morning Shift' AS shift
+			SELECT *, 'Morning Shift' AS shift
                         FROM retail_sales
                         WHERE sale_time BETWEEN '00:00:00' AND '12:00:00'
                         ),
 afternoon_shift AS (
-						SELECT *, 'Afternoon Shift' AS shift
+			SELECT *, 'Afternoon Shift' AS shift
                         FROM retail_sales
                         WHERE sale_time BETWEEN '12:00:00' AND '17:00:00'
                         ),
 evening_shift AS (
-						SELECT *, 'Evening Shift' AS shift
+			SELECT *, 'Evening Shift' AS shift
                         FROM retail_sales
                         WHERE sale_time BETWEEN '17:00:00' AND '24:00:00'
                         )
